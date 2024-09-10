@@ -1,10 +1,11 @@
 import time
 import unittest
+from appium.webdriver.common.touch_action import TouchAction
 from config.get_config import get_yaml_data
 from appium.options.android import UiAutomator2Options
 from appium import webdriver
 from appium.webdriver.common.appiumby import AppiumBy
-from selenium.webdriver.common.action_chains import ActionChains
+from config import point_keyboard
 
 
 class MyTestKeyboardCase(unittest.TestCase):
@@ -21,40 +22,33 @@ class MyTestKeyboardCase(unittest.TestCase):
     def test_touch_keyboard(self):
         # 点击搜索框以弹出键盘
         self.driver.find_element(by=AppiumBy.ID, value="com.iflytek.inputmethod:id/fly_navigation_bar_right_icon").click()
-        # 点击Q
-        TouchAction(self.driver).press(71, 1002)
 
+        # 等待
+        time.sleep(5)
+
+        # 点击Q
+        # point_keyboard.q_key(5)
+        try:
+            TouchAction(self.driver).tap(None, x=71, y=1008, count=5).perform()
+        except BaseException:
+            print("Q没有点到！")
+
+        # 点击W
+        # point_keyboard.w_key(2)
+        try:
+            TouchAction(self.driver).tap(None, x=135, y=1008, count=2).perform()
+        except BaseException:
+            print("W没有点到！")
 
         # 截图
         time.sleep(1)
         self.driver.save_screenshot("D:\\data\\python\\TestKeyboardProject\\screenshots\\screen.png")
 
-    def Q_board(self):
-        # 依据坐标点击Q X:71 Y:1002
-        # 720*1280
-        rel_a1 = 71 / 720
-        rel_b1 = 1002 / 1280
-        x = self.driver.get_window_size()['width']
-        y = self.driver.get_window_size()['height']
-        try:
-            self.driver.tap([(rel_a1 * x), (rel_b1 * y), (x, y)], 50)
-        except BaseException:
-            print("点击错误！")
+        # 点击元素
+        # el = self.driver.find_element(by=AppiumBy.ID, value="com.iflytek.inputmethod.settingsnew:id/combineSearchButton")
+        # TouchAction(self.driver).tap(el).perform()
 
-    def W_board(self):
-        # 依据坐标点击Q X:133 Y:994
-        # 720*1280
-        rel_a1 = 133 / 720
-        rel_b1 = 994 / 1280
-        x = self.driver.get_window_size()['width']
-        y = self.driver.get_window_size()['height']
-        try:
-            self.driver.tap([(rel_a1 * x), (rel_b1 * y), (x, y)], 50)
-        except BaseException:
-            print("点击错误！")
-        # 断言
 
-        # self.assertEqual(True, False)  # add assertion here
 
 
 if __name__ == '__main__':
