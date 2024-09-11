@@ -1,6 +1,6 @@
 import time
 import unittest
-from appium.webdriver.common.touch_action import TouchAction
+from selenium.webdriver.common.action_chains import ActionChains
 from config.get_config import get_yaml_data
 from appium.options.android import UiAutomator2Options
 from appium import webdriver
@@ -28,27 +28,34 @@ class MyTestKeyboardCase(unittest.TestCase):
 
         # 点击Q
         # point_keyboard.q_key(5)
-        try:
-            TouchAction(self.driver).tap(None, x=71, y=1008, count=5).perform()
-        except BaseException:
-            print("Q没有点到！")
+        # try:
+        #     ActionChains(self.driver).click(None, x=71, y=1008, count=5).perform()
+        # except BaseException:
+        #     print("Q没有点到！")
 
         # 点击W
         # point_keyboard.w_key(2)
+        # try:
+        #     TouchAction(self.driver).tap(None, x=135, y=1008, count=2).perform()
+        # except BaseException:
+        #     print("W没有点到！")
+
+        # 点击搜索
         try:
-            TouchAction(self.driver).tap(None, x=135, y=1008, count=2).perform()
+            el = self.driver.find_element(by=AppiumBy.ID, value="com.iflytek.inputmethod.settingsnew:id/combineSearchButton")
+            actions = ActionChains(self.driver)
+            actions.click(el)
+            actions.perform()
         except BaseException:
-            print("W没有点到！")
+            print("没有点击！")
+
+        # 断言
+        self.assertEqual(self.driver.current_activity, ".settingsnew.combinesearch.activity.CombineSearchActivity", "断言失败！")
+        print(self.driver.current_activity)
 
         # 截图
         time.sleep(1)
         self.driver.save_screenshot("D:\\data\\python\\TestKeyboardProject\\screenshots\\screen.png")
-
-        # 点击元素
-        # el = self.driver.find_element(by=AppiumBy.ID, value="com.iflytek.inputmethod.settingsnew:id/combineSearchButton")
-        # TouchAction(self.driver).tap(el).perform()
-
-
 
 
 if __name__ == '__main__':
